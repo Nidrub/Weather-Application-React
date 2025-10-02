@@ -16,6 +16,8 @@ function App() {
   const [currentTemp, setCurrentTemp] = useState<number | null>(null);
   //the current city
   const [selectedCity, setSelectedCity] = useState<string>("");
+  //if there is a city selected, fetch the weather data from the API
+  const [activeWeatherScreen, setActiveWeatherScreen] = useState<boolean>(false);
 
   const handleCitySelect = async (city: City) => {
     setSelectedCity(
