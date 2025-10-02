@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { SearchBar } from "./components/SearchBar";
 //api key from the .env file
 const API_key: string = import.meta.env.VITE_API_KEY;
@@ -38,8 +37,9 @@ function App() {
 
   return (
     <>
-      <div className="p-4">
-        <SearchBar onCitySelect={handleCitySelect} />
+      {/* the rest is already inside the body automatically */}
+      <SearchBar onCitySelect={handleCitySelect} />
+      <div className="weaather-container">
         {/* if there is a SelectedCity and current Temp is not null */}
         {selectedCity && currentTemp !== null && (
           <div className="mt-4">

@@ -93,16 +93,15 @@ export function SearchBar({ onCitySelect }: Props) {
           // set the onChange to use the setQuery function to update the query state and it activaes the useEffect
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Search for a city"
-          className="w-full px-4 py-2 border border-gray-300 rounded"
+          className="search-input"
         />
         {/* if statement (if ShowSuggestions is true and cities has a length greater than 0)  */}
         {showSuggestions && cities.length > 0 && (
-          <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded mt-1 max-h-60 overflow-y-auto">
+          <ul className="cities-list">
             {/* generate a list of cities.map list to use */}
             {cities.map((city, index) => (
               <li
                 key={index}
-                className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
                 // when the user clicks on a city, call the handleCitySelect function with the selected city
                 onClick={() => handleCitySelect(city)}
               >
