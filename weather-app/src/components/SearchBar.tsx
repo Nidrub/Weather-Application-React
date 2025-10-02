@@ -1,66 +1,119 @@
 import { useState, useEffect } from "react";
+const API_key: string = import.meta.env.VITE_API_KEY;
+//interface to define what city is and the lan and lon
+interface City {
+  name: string;
+  state?: string;
+  country: string;
+  lat: number;
+  lon: number;
+}
+//props for the search bar
+interface Props {
+  //function that is passed from the parent App component to the SearchBar component
+  onCitySelect: (city: City) => void;
+}
+export function SearchBar({ onCitySelect }: Props) {
+  //what the user inputs in the search bar
+  const [inputValue, setInputValue] = useState<string>("");
+  //the list of cities that match the query, City list of type City
+  const [cities, setCities] = useState<City[]>([]);
+  //show suggested cities (true the show, false then hide) boolean guaranteed to be true or false
+  const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
 
-const API_KEY = "3f60915f4b6d7816508a9f95344d080a";
-
-export default function SearchBar(){
-
-    //input from the search bar
-    const [query, setQuery] = useState<string>("");
-    //list of items to display in the dropdown in string array
-    const [suggestions, setSuggestions] = useState<string[]>([]);
-    //boolean to show or hide the dropdown
-    const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
-    //useEffect to fetch, every time their iany change in the query
-    useEffect(() => {
-        //if there is more than 2 characters, fetch the data
-        if (query.length > 2) {
-            const fetchCities = async () => {
-                try {
-                    const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=${API_KEY}`);
-                    const data = await response.json();
-                    //destructure the data to get the name, state, country, lat and lon
-                    //map the data to a string array and set the suggestions state
-                    setSuggestions(data.map((item: { name: string; state: string; country: string; lat: number; lon: number }) => `${item.name}, ${item.state ? item.state + ', ' : ''}${item.country} (Lat: ${item.lat}, Lon: ${item.lon})`));
-                    console.log(data);
-                    //show the dropdown
-                    setShowSuggestions(true);
-                }
-                catch (error) {
-                    console.error("Error fetching city data:", error);
-                }
-    };
-    fetchCities();
-    //if the query is less than 2 characters, clear the suggestions and hide the dropdown
-        } else {
-            setSuggestions([]);
+  //useEffect to fetch cities from the API when the query changes
+  useEffect(() => {
+    //if the query is greater than 1 character, fetch the cities
+    if (inputValue.length > 1) {
+      const fetchCities = async () => {
+        try {
+          //fetch the cities from the API
+          console.log("Fetching cities for query:", inputValue);
+          console.log("Using API key:", API_key);
+          console.log(
+            `https://api.openweathermap.org/geo/1.0/direct?q=${inputValue}&limit=5&appid=${API_key}`
+          );
+          const response = await fetch(
+            `https://api.openweathermap.org/geo/1.0/direct?q=${inputValue}&limit=5&appid=${API_key}`
+          );
+          //if the response is not ok, throw an error
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          //parse the response as JSON and in City format
+          const data: City[] = await response.json();
+          //if there is no data, set cities to an empty array and set showSuggestions to false
+          if (!data || data.length === 0) {
+            setCities([]);
             setShowSuggestions(false);
-        }}, [query]);
-        // handle input change
-        const handleSelect = (item:string)=>{
-            setQuery(item);
-            setShowSuggestions(false);
-        };
-    return(
-        <div className="relative w-64">
-            <input
-                type="text"
-                className="w-full px-4 py-2 border border-gray-300 rounded"
-                placeholder="Search for a city"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}/>
-                {/* if there is showSuggest true and suggestion has more than 0 */}
-            {showSuggestions && suggestions.length > 0 && (
-                <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded mt-1 max-h-60 overflow-y-auto">
-                    {suggestions.map((item, index) => (
-                        <li
-                            key={index}
-                            className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                            onClick={() => handleSelect(item)}>{item}</li>
-                    ))}
-                </ul>
-            )}
-
-        </div>
-    )
-    
+            return;
+          }
+          //set the cities to the data from the API
+          setCities(data);
+          //setShowSuggestions to true to show the suggestion list
+          setShowSuggestions(true);
+        } catch (error) {
+          //if there us an error, log it to the console
+          console.error("Error fetching city data:", error);
+          //also set cities to an empty array and set showSuggestions to false
+          setCities([]);
+          setShowSuggestions(false);
+        }
+      };
+      //fetch the cities using the function
+      fetchCities();
+      //show the suggestion list of cities
+      setShowSuggestions(true);
+    } else {
+      //if the query is less than 1 character, clear the cities and hide the suggestions
+      setCities([]);
+      setShowSuggestions(false);
     }
+  }, [inputValue]); //dependency array, when query changes, the useEffect runs
+
+  //handle the Selected city when the user clicks on a city from the suggestion list
+  const handleCitySelect = (city: City) => {
+    ///set City to -> city
+    //clear the input value to the selected city
+    setInputValue("");
+    //clear the cities array
+    setCities([]);
+    //hide the suggestions
+    setShowSuggestions(false);
+    //call the onCitySelect function passed from the parent component with the selected city
+    onCitySelect(city);
+  };
+  //our return statement
+  return (
+    <>
+      <div className="search-bar-container">
+        <input
+          type="text"
+          value={inputValue}
+          // set the onChange to use the setQuery function to update the query state and it activaes the useEffect
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Search for a city"
+          className="w-full px-4 py-2 border border-gray-300 rounded"
+        />
+        {/* if statement (if ShowSuggestions is true and cities has a length greater than 0)  */}
+        {showSuggestions && cities.length > 0 && (
+          <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded mt-1 max-h-60 overflow-y-auto">
+            {/* generate a list of cities.map list to use */}
+            {cities.map((city, index) => (
+              <li
+                key={index}
+                className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                // when the user clicks on a city, call the handleCitySelect function with the selected city
+                onClick={() => handleCitySelect(city)}
+              >
+                {city.name}
+                {city.state ? `, ${city.state}` : ""}, {city.country}
+              </li>
+            ))}
+          </ul>
+        )}
+        ;
+      </div>
+    </>
+  );
+}
