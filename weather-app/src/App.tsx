@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { SearchBar } from "./components/SearchBar";
+import { SearchBar } from "./components/SearchBar/SearchBar";
+import { WeatherScreen } from "./components/WeatherScreen/WeatherScreen";
 //api key from the .env file
 const API_key: string = import.meta.env.VITE_API_KEY;
 //interface to define what city is and the lan and lon
@@ -17,7 +18,12 @@ function App() {
   //the current city
   const [selectedCity, setSelectedCity] = useState<string>("");
   //if there is a city selected, fetch the weather data from the API
-  const [activeWeatherScreen, setActiveWeatherScreen] = useState<boolean>(false);
+  const [activeWeatherScreen, setActiveWeatherScreen] =
+    useState<boolean>(false);
+  //weather type
+  const [weatherType, setWeatherType] = useState<string>("");
+  //icon
+  const [icon, setIcon] = useState<string>("");
 
   const handleCitySelect = async (city: City) => {
     setSelectedCity(
@@ -31,6 +37,9 @@ function App() {
       //set the current temp to the temp from the API
       const data = await response.json();
       setCurrentTemp(data.main.temp); //updates the temperature state
+      setActiveWeatherScreen(true); // set true tha weather screen is active
+      setWeatherType(data.weather[0].description); //set the weather type from the API
+      setIcon(data.weather[0].icon); //set the icon from the API
     } catch (error) {
       console.error("Error fetching weather data:", error);
       setCurrentTemp(null); //reset the temperature state on error
@@ -41,15 +50,13 @@ function App() {
     <>
       {/* the rest is already inside the body automatically */}
       <SearchBar onCitySelect={handleCitySelect} />
-      <div className="weaather-container">
-        {/* if there is a SelectedCity and current Temp is not null */}
-        {selectedCity && currentTemp !== null && (
-          <div className="mt-4">
-            <h2 className="text-2xl font-bold">{selectedCity}</h2>
-            <p className="text-xl">Current Temperature: {currentTemp}°C</p>
-          </div>
-        )}
-      </div>
+      <WeatherScreen
+        name={selectedCity}
+        temp={currentTemp !== null ? currentTemp : 0} //if currentTemp is null, set it to 0
+        activeWeatherScreen={activeWeatherScreen}
+        weatherType={weatherType}
+        icon={icon}
+      />
     </>
   );
 }

@@ -48,7 +48,7 @@ export function SearchBar({ onCitySelect }: Props) {
             setShowSuggestions(false);
             return;
           }
-          //set the cities to the data from the API
+          //set the cities to the data from the API (also it gets lat and lon)
           setCities(data);
           //setShowSuggestions to true to show the suggestion list
           setShowSuggestions(true);

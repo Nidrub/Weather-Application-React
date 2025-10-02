@@ -1,0 +1,47 @@
+/* creating aproperty allows for animations */
+@property --bg-color-a {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #dedede;
+}
+
+@property --bg-color-b {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #dedede;
+}
+
+/* Container with gradient using CSS variables */
+.weather-container {
+  width: 100%;
+  height: 110vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+
+  --bg-color-a: #dedede;
+  --bg-color-b: #dedede;
+
+  background: linear-gradient(217deg, var(--bg-color-a) 0%, var(--bg-color-b) 100%);
+  transition: --bg-color-a 1s ease-in-out, --bg-color-b 1s ease-in-out;
+}
+
+
+.weather-screen {
+  width: 300px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.5s ease-in-out;
+  opacity: 0;
+}
+
+.active {
+  opacity: 1;
+  visibility: visible;
+}
