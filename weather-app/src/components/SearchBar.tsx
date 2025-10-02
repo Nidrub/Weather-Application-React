@@ -112,7 +112,6 @@ export function SearchBar({ onCitySelect }: Props) {
             ))}
           </ul>
         )}
-        ;
       </div>
     </>
   );
