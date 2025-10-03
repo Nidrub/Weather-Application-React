@@ -75,7 +75,7 @@ export function WeatherScreen({
                 <>
                   <h2>{name}</h2>
                   <h3>Temp</h3>
-                  <h1>{`${Math.round(temp)} C`}</h1>
+                  <h1>{`${Math.round(temp)}°C`}</h1>
                   <h4>{weatherType}</h4>
                   <h4 className="time">{isDayTime ? "Day" : "Night"}</h4>
                 </>

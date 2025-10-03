@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import "./SearchBar.css";
+//api key from the .env file
 const API_key: string = import.meta.env.VITE_API_KEY;
 //interface to define what city is and the lan and lon
 interface City {
@@ -87,6 +89,11 @@ export function SearchBar({ onCitySelect }: Props) {
   return (
     <>
       <div className="search-bar-container">
+        <img
+          src="https://openweathermap.org/img/wn/10d@2x.png"
+          alt="none"
+          id="logo"
+        />
         <input
           type="text"
           value={inputValue}
@@ -94,6 +101,12 @@ export function SearchBar({ onCitySelect }: Props) {
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Search for a city"
           className="search-input"
+          onKeyDown={(e) => {
+            //if the user presses the Enter key and there are cities in the list, select the first city
+            if (e.key === "Enter" && cities.length > 0) {
+              handleCitySelect(cities[0]);
+            }
+          }}
         />
         {/* if statement (if ShowSuggestions is true and cities has a length greater than 0)  */}
         {showSuggestions && cities.length > 0 && (

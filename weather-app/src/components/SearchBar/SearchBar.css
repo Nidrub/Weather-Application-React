@@ -1,0 +1,53 @@
+.search-bar-container {
+    background-color: black;
+    height: 70px;
+    display: flex;
+    flex-direction: row; /* logo and input side by side */
+    align-items: center;
+    gap: 10px; /* space between logo and input */
+    position: relative; /* needed for dropdown positioning */
+}
+
+#logo {
+    width: 50px;
+    height: 50px;
+}
+
+.search-container {
+    position: relative; /* wrap input and dropdown */
+}
+
+input {
+    box-sizing: border-box;
+    width: 600px;
+    height: 40px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%; /* match input width */
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    position: absolute;
+    top: 70px; /* right below input */
+    left: 0; /* align with input */
+    z-index: 1000;
+}
+
+ul li {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+ul li:hover {
+    background-color: #f0f0f0; /* highlight on hover */
+}

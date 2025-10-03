@@ -14,7 +14,7 @@
 /* Container with gradient using CSS variables */
 .weather-container {
   width: 100%;
-  height: 110vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,7 +50,7 @@ img{
       filter: drop-shadow(5px 5px 15px rgba(0, 0, 0, 0.8));
 }
 h1 {
-  font-size: 3rem;
+  font-size: 2rem;
   margin: 0.5rem 0;
 }
 h3 {
