@@ -1,4 +1,4 @@
-import { act, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./WeatherScreen.css";
 interface Props {
   name: string;
@@ -7,17 +7,6 @@ interface Props {
   weatherType: string;
   icon: string;
 }
-const weatherConditionType = [
-  "clear sky",
-  "few clouds",
-  "scattered clouds",
-  "broken clouds",
-  "shower rain",
-  "rain",
-  "thunderstorm",
-  "snow",
-  "mist",
-];
 const gradients: Record<string, [string, string]> = {
   "clear sky": ["#8bd3f0ff", "#0070d1ff"],
   "few clouds": ["#dedede", "#1a72e6ff"],
