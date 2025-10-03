@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { act, useEffect, useRef, useState } from "react";
 import "./WeatherScreen.css";
 interface Props {
   name: string;
@@ -38,14 +38,20 @@ export function WeatherScreen({
   weatherType,
   icon,
 }: Props) {
-  
+  //on load the icon from the API
+  const [loading, setLoading] = useState(true);
+  //if there is an icon and it changes, set loading to true
+  useEffect(() => {
+    if (icon) {
+      setLoading(true);
+    }
+  }, [icon]);
   //weathere icon url
-  const weatherIconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+  const weatherIconUrl = `https://openweathermap.org/img/wn/${icon}@4x.png`;
+
   console.log("WeatherScreen icon URL:", weatherIconUrl); // Debugging line
-  //handles the active class to active or default
-  const activeHandle = () => {
-    return activeWeatherScreen ? "active" : "";
-  };
+  //day night time based on the icon code from the API
+  const isDayTime = icon.includes("d"); // 'd' for day, 'n' for night true if day, false if night
   // Background gradient transition
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -58,12 +64,30 @@ export function WeatherScreen({
   return (
     <>
       <div ref={containerRef} className="weather-container">
-        <div className={`weather-screen ${activeHandle()} `}>
-          <h2>{name}</h2>
-          <h3>Temp</h3>
-          <h1>{`${Math.round(temp)} C`}</h1>
-          <h4>{weatherType}</h4>
-          <img src={weatherIconUrl} alt="none" />
+        <div className={`weather-screen`}>
+          {!activeWeatherScreen ? (
+            <h1>Please Write Your City</h1>
+          ) : (
+            <>
+              {loading ? (
+                <p>loading...</p>
+              ) : (
+                <>
+                  <h2>{name}</h2>
+                  <h3>Temp</h3>
+                  <h1>{`${Math.round(temp)} C`}</h1>
+                  <h4>{weatherType}</h4>
+                  <h4 className="time">{isDayTime ? "Day" : "Night"}</h4>
+                </>
+              )}
+              <img
+                className={loading ? "hidden" : ""}
+                src={weatherIconUrl}
+                alt="none"
+                onLoad={() => setLoading(false)}
+              />
+            </>
+          )}
         </div>
       </div>
     </>

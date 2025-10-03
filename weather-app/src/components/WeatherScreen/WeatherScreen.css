@@ -28,20 +28,41 @@
   transition: --bg-color-a 1s ease-in-out, --bg-color-b 1s ease-in-out;
 }
 
-
 .weather-screen {
-  width: 300px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  border-radius: 12px;
-  text-align: center;
-  background: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  transition: all 0.5s ease-in-out;
-  opacity: 0;
+    width: 350px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: all 0.5s ease-in-out;
 }
 
-.active {
-  opacity: 1;
-  visibility: visible;
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+img{
+    height: 10vh;
+    margin-top: 1rem;
+      filter: drop-shadow(5px 5px 15px rgba(0, 0, 0, 0.8));
+}
+h1 {
+  font-size: 3rem;
+  margin: 0.5rem 0;
+}
+h3 {
+  font-size: 1.2rem;
+  color: #555;
+}
+h4 {
+  font-size: 1rem;
+  color: #777;
+}
+.time{
+    margin-top: 0.5rem;
+
+    color: #333;
 }
